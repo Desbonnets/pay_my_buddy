@@ -33,17 +33,17 @@ public class DataLoader implements CommandLineRunner {
         User alice = new User();
         alice.setUsername("Alice");
         alice.setEmail("alice@example.com");
-        alice.setPassword(passwordEncoder.encode("password123"));
+        alice.setPassword(passwordEncoder.encode("pass"));
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmail("bob@example.com");
-        bob.setPassword(passwordEncoder.encode("password123"));
+        bob.setPassword(passwordEncoder.encode("pass"));
 
         User charlie = new User();
         charlie.setUsername("Charlie");
         charlie.setEmail("charlie@example.com");
-        charlie.setPassword(passwordEncoder.encode("password123"));
+        charlie.setPassword(passwordEncoder.encode("pass"));
 
         // Ajouter des connexions (Many-to-Many)
         alice.setConnections(Set.of(bob, charlie));

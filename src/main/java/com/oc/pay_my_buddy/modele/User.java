@@ -1,6 +1,11 @@
 package com.oc.pay_my_buddy.modele;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.List;
 import java.util.Set;
 
@@ -11,8 +16,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
+    @NotNull(message = "Le nom d'utilisateur ne peut pas être vide")
     private String username;
+
+    @Column(unique = true, nullable = false)
+    @Email(message = "L'email doit être valide")
+    @NotBlank(message = "L'email est obligatoire")
     private String email;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Le mot de passe est obligatoire")
+    @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     private String password;
 
     @ManyToMany
@@ -95,4 +110,5 @@ public class User {
     public void setTransactionsReceived(List<Transaction> transactionsReceived) {
         this.transactionsReceived = transactionsReceived;
     }
+
 }
