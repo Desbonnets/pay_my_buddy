@@ -5,6 +5,7 @@ import com.oc.pay_my_buddy.modele.Transaction;
 import com.oc.pay_my_buddy.repository.UserRepository;
 import com.oc.pay_my_buddy.repository.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,10 +16,15 @@ public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataLoader(UserRepository userRepository, TransactionRepository transactionRepository) {
+    public DataLoader(
+            UserRepository userRepository,
+            TransactionRepository transactionRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -27,17 +33,17 @@ public class DataLoader implements CommandLineRunner {
         User alice = new User();
         alice.setUsername("Alice");
         alice.setEmail("alice@example.com");
-        alice.setPassword("password123");
+        alice.setPassword(passwordEncoder.encode("password123"));
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmail("bob@example.com");
-        bob.setPassword("password123");
+        bob.setPassword(passwordEncoder.encode("password123"));
 
         User charlie = new User();
         charlie.setUsername("Charlie");
         charlie.setEmail("charlie@example.com");
-        charlie.setPassword("password123");
+        charlie.setPassword(passwordEncoder.encode("password123"));
 
         // Ajouter des connexions (Many-to-Many)
         alice.setConnections(Set.of(bob, charlie));
