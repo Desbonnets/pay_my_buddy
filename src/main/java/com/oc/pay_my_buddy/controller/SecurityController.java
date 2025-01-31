@@ -16,19 +16,19 @@ public class SecurityController {
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
-        Authentication authenticationRequest =
-                UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
-        Authentication authenticationResponse =
-                this.authenticationManager.authenticate(authenticationRequest);
-        if (authenticationResponse.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
-            return "/";
-        }else {
-            return "security/login";
-        }
-    }
+//    @PostMapping("/login")
+//    public String login(@RequestBody LoginRequest loginRequest) {
+//        Authentication authenticationRequest =
+//                UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
+//        Authentication authenticationResponse =
+//                this.authenticationManager.authenticate(authenticationRequest);
+//        if (authenticationResponse.isAuthenticated()) {
+//            SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+//            return "redirect:/users";
+//        }else {
+//            return "security/login";
+//        }
+//    }
 
     public record LoginRequest(String username, String password) {
     }
