@@ -46,9 +46,7 @@ public class DataLoader implements CommandLineRunner {
         charlie.setPassword(passwordEncoder.encode("pass"));
 
         // Ajouter des connexions (Many-to-Many)
-        alice.setConnections(Set.of(bob, charlie));
-        bob.setConnections(Set.of(alice));
-        charlie.setConnections(Set.of(alice));
+        alice.addConnection(charlie);
 
         // Sauvegarder les utilisateurs dans la base
         userRepository.saveAll(List.of(alice, bob, charlie));
@@ -56,7 +54,7 @@ public class DataLoader implements CommandLineRunner {
         // Créer une transaction entre Alice et Bob
         Transaction transaction = new Transaction();
         transaction.setSender(alice);
-        transaction.setReceiver(bob);
+        transaction.setReceiver(charlie);
         transaction.setDescription("Remboursement du déjeuner");
         transaction.setAmount(25.0);
 

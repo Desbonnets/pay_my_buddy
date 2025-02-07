@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final CustomUserDetailService userDetailService;
@@ -30,15 +32,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/user/new", "/login").permitAll()
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/user/new", "/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin((form) -> form
-                        .loginPage("/login").defaultSuccessUrl("/user/", true)
+                .formLogin(form -> form
+                        .loginPage("/login").defaultSuccessUrl("/user", true)
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout(logout -> logout.permitAll()
+                );
 
         return http.build();
     }
@@ -51,16 +54,5 @@ public class SecurityConfig {
 
         return new ProviderManager(authenticationProvider);
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails userDetails = User.builder()
-//                .username("user")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(userDetails);
-//    }
 
 }
