@@ -1,6 +1,8 @@
 package com.oc.pay_my_buddy.modele;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Transaction {
@@ -17,7 +19,9 @@ public class Transaction {
     @JoinColumn(name = "receiver", nullable = false)
     private User receiver;
 
+    @NotBlank(message = "La description est obligatoire")
     private String description;
+
     private Double amount;
 
     // Constructeur par défaut

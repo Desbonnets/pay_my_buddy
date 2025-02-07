@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transfert</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/transaction}" method="post" th:object="${transaction}">
+        <div>
+            <label for="receiver">Destinataire :</label>
+            <select id="receiver" name="receiver" th:field="*{receiver}" required>
+                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.email}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('receiver')}" th:errors="*{receiver}"></div><br><br>
+            <label for="description">Description :</label>
+            <input type="text" id="description" name="description" th:field="*{description}" required/>
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div><br><br>
+            <label for="amount">Montant :</label>
+            <input type="number" step="any" min="1" id="amount" name="amount" th:field="*{amount}" required/>
+            <span>€</span>
+            <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div><br><br>
+        </div>
+
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+</div>
+<h1>Mes Transactions</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Relations</th>
+        <th>Description</th>
+        <th>Montant</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Boucle Thymeleaf -->
+    <tr th:each="transaction : ${transactions}">
+        <td th:text="${transaction.receiver.username}"></td>
+        <td th:text="${transaction.description}"></td>
+        <td th:text="${transaction.amount}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ajouter une relation</title>
+</head>
+<body>
+<h1>Ajouter une relation</h1>
+<form th:action="@{/user/add_relation}" method="post" th:object="${relation}">
+    <div>
+        <label for="email">Chercher une relation :</label>
+        <input type="text" id="email" name="email" th:field="*{email}" required/>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div><br><br>
+    </div>
+
+    <button type="submit">Ajouter</button>
+</form>
+
+<div th:if="${error}" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+
+</body>
+</html>
