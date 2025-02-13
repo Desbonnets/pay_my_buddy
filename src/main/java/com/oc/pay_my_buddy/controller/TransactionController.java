@@ -45,7 +45,7 @@ public class TransactionController {
         model.addAttribute("users", currentUser.getConnections());
         model.addAttribute("transaction", new Transaction());
         model.addAttribute("transactions", transactionService.getAllTransactions());
-        return "transaction/index"; // Renvoie le nom du template Thymeleaf (users.html)
+        return "/transaction/index";
     }
 
     @PostMapping("")

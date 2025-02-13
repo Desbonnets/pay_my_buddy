@@ -113,7 +113,7 @@ public class UserController {
             currentUser.addConnection(friend);
             userService.updateUser(currentUser);
 
-            return "redirect:/user";
+            return "redirect:/transaction";
 
         } catch (Exception e) {
             model.addAttribute("error", "Erreur lors de l'ajout de la relation.");
