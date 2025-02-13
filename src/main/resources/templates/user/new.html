@@ -2,28 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Inscription</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
 </head>
-<body>
-<h1>Inscription</h1>
-    <form th:action="@{/user/new}" th:object="${user}" method="post">
-        <div>
-            <label for="username">nom d'utilisateur :</label>
-            <input type="text" id="username" name="username" th:field="*{username}" required/>
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div><br><br>
+<body  class="flex-center">
+    <div class="container">
+        <div class="mb-w2 mt-w1">
+            <label class="btn btn-orange">Pay My Buddy</label>
         </div>
-        <div>
-            <label for="email">Email :</label>
-            <input type="text" id="email" name="email" th:field="*{email}" required/>
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div><br><br>
-        </div>
+        <form th:action="@{/user/new}" th:object="${user}" method="post">
+            <div>
+                <input type="text" id="username" name="username" placeholder="Username" th:field="*{username}" required/>
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+            </div>
+            <div>
+                <input type="text" id="email" name="email" placeholder="Mail" th:field="*{email}" required/>
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
 
-        <div>
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" th:field="*{password}" required/>
-            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div><br><br>
-        </div>
+            <div>
+                <input type="password" id="password" name="password" placeholder="Mot de passe" th:field="*{password}" required/>
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            </div>
 
-        <button type="submit">Inscription</button>
-    </form>
+            <button class="btn btn-blue" type="submit">S'inscrire</button>
+        </form>
+    </div>
 </body>
 </html>

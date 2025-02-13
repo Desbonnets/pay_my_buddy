@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Ajouter une relation</title>
-</head>
-<body>
-<h1>Ajouter une relation</h1>
-<form th:action="@{/user/add_relation}" method="post" th:object="${relation}">
-    <div>
-        <label for="email">Chercher une relation :</label>
-        <input type="text" id="email" name="email" th:field="*{email}" required/>
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div><br><br>
-    </div>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+    <head>
+        <title layout:title-pattern="Pay My Buddy - Ajouter une relation">Ajouter une relation</title>
+    </head>
+    <body>
+        <main layout:fragment="content">
+            <form th:action="@{/user/add_relation}" method="post" th:object="${relation}">
+                <div class="flex-row flex-center">
+                    <div class="mr-w1">
+                        <label for="email">Chercher une relation</label>
+                        <input type="text" id="email" name="email" placeholder="Saisir une adresse mail" th:field="*{email}" required/>
+                    </div>
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <button class="btn-fit btn-orange mt-w1" type="submit">Ajouter</button>
+                </div>
+            </form>
 
-    <button type="submit">Ajouter</button>
-</form>
-
-<div th:if="${error}" style="color: red;">
-    <p th:text="${error}"></p>
-</div>
-
-</body>
+            <div th:if="${error}" style="color: red;">
+                <p th:text="${error}"></p>
+            </div>
+        </main>
+    </body>
 </html>

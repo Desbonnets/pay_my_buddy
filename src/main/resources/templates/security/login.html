@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Connexion</title>
-</head>
-<body>
-    <h1>Connexion</h1>
-    <form th:action="@{/login}" method="post">
-        <label for="username">Email ou nom d'utilisateur :</label>
-        <input type="text" id="username" name="username" required/><br><br>
+    <head>
+        <title>Connexion</title>
+        <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
+    </head>
+    <body class="flex-center">
+        <div class="container">
+            <div class="mb-w2 mt-w1">
+                <label class="btn btn-orange">Pay My Buddy</label>
+            </div>
+            <div th:if="${param.logout}">
+                <p>Vous avez été déconnecté avec succès.</p>
+            </div>
+            <form th:action="@{/login}" method="post">
+                <input type="text" id="username" name="username" placeholder="Email" required/>
+                <input type="password" id="password" name="password" placeholder="Mot de passe" required/>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required/><br><br>
+                <div class="flex-center">
+                    <button class="btn btn-blue" type="submit">Connexion</button>
+                </div>
+            </form>
 
-        <button type="submit">Connexion</button>
-    </form>
-
-    <p th:if="${param.error}">Invalid username or password.</p>
-    <p th:if="${param.logout}">You have been logged out.</p>
-</body>
+            <p th:if="${param.error}">Invalid username or password.</p>
+        </div>
+    </body>
 </html>
