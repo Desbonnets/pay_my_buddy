@@ -14,9 +14,9 @@
     <nav>
         <ul>
             <li class="left">Pay My Buddy</li>
-            <li><a href="/transaction">Transférer</a></li>
-            <li><a href="/user/profile">Profil</a></li>
-            <li><a href="/user/add_relation">Ajouter relation</a></li>
+            <li><a href="/transaction" th:classappend="${currentPath == '/transaction'} ? 'active'">Transférer</a></li>
+            <li><a href="/user/profile" th:classappend="${currentPath == '/user/profile'} ? 'active'">Profil</a></li>
+            <li><a href="/user/add_relation" th:classappend="${currentPath == '/user/add_relation'} ? 'active'">Ajouter relation</a></li>
             <li th:insert="~{security/logout :: logout}"></li>
         </ul>
     </nav>
@@ -33,4 +33,5 @@
 </footer>
 
 </body>
+<script layout:fragment="javascript"></script>
 </html>

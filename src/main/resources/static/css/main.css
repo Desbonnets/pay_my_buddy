@@ -1,10 +1,16 @@
+/* Variable */
+:root {
+    --main-color: #207FEE;
+    --second-color: #F69F1D;
+    --main-border-color: #E0E0E0;
+}
+
 /* Style général */
 body {
     display: flex;
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    background-color: #f8f9fa;
     font-family: Arial, sans-serif;
     font-size: 20px;
 }
@@ -22,13 +28,18 @@ body {
 }
 
 /* Champs de saisie */
-input {
+input, select {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 20px;
+}
+
+.error{
+    color: red;
+    font-size: 16px;
 }
 
 /* Boutons */
@@ -40,6 +51,19 @@ input {
     font-size: 20px;
     width: 100%;
     margin-top: 10px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-link {
+    border: none;
+    font-size: 20px;
+    background-color: white;
+}
+
+.btn-link:hover {
+    color: var(--main-color);
+    cursor: pointer;
 }
 
 .btn-fit {
@@ -52,12 +76,12 @@ input {
 }
 
 .btn-orange {
-    background-color: #ff9800;
+    background-color: var(--second-color);
     color: white;
 }
 
 .btn-blue {
-    background-color: #007bff;
+    background-color: var(--main-color);
     color: white;
 }
 
@@ -146,4 +170,79 @@ nav ul .left {
 
 nav ul li:last-child {
     margin-right: 0;
+}
+
+nav a {
+    text-decoration: none;
+    margin: 0 10px;
+    color: black;
+}
+nav a:hover {
+    color: var(--main-color);
+}
+
+nav a.active {
+    color: var(--main-color);
+}
+
+.table {
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    width: 100%;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.table caption{
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.table > table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.table th, .table td {
+    padding: 10px;
+}
+
+.table td {
+    border-top: 1px solid #E0E0E0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--main-border-color);
+}
+
+.label {
+    font-weight: bold;
+    flex-shrink: 0; /* Empêche le label de rétrécir */
+    min-width: max-content; /* Taille minimale basée sur le plus grand élément */
+    margin-right: 10px;
+}
+
+.value {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Permet à la valeur de s’étendre et prendre le reste de l’espace */
+    justify-content: flex-end;
+}
+
+.value::after {
+    content: '›';
+    margin-left: 8px;
+    color: var(--main-border-color);
 }

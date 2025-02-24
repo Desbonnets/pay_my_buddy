@@ -1,6 +1,7 @@
 package com.oc.pay_my_buddy.controller;
 
 import com.oc.pay_my_buddy.config.SecurityConfig;
+import com.oc.pay_my_buddy.dto.Profil;
 import com.oc.pay_my_buddy.dto.Relation;
 import com.oc.pay_my_buddy.modele.User;
 import com.oc.pay_my_buddy.service.UserService;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -86,32 +85,28 @@ public class UserController {
 
             // Récupération de l'utilisateur connecté
             User currentUser = (User) userDetails;
-            Optional<User> userConnected = userService.getUserByEmail(currentUser.getEmail());
-            if (userConnected.isEmpty()) {
+            User userConnected = userService.getUserByEmail(currentUser.getEmail());
+            if (userConnected == null) {
                 model.addAttribute("error", "Utilisateur connecté introuvable.");
                 return "user/add_relation";
-            }else {
-                currentUser = userConnected.get();
             }
 
             // Récupération de l'utilisateur à ajouter
-            Optional<User> userToAdd = userService.getUserByEmail(relation.getEmail());
-            if (userToAdd.isEmpty()) {
+            User friend = userService.getUserByEmail(relation.getEmail());
+            if (friend == null) {
                 model.addAttribute("error", "Utilisateur non trouvé.");
                 return "user/add_relation";
             }
 
-            User friend = userToAdd.get();
-
             // Vérifier si la relation existe déjà
-            if (currentUser.getConnections().contains(friend)) {
+            if (userConnected.getConnections().contains(friend)) {
                 model.addAttribute("error", "Cette relation existe déjà.");
                 return "user/add_relation";
             }
 
             // Ajouter la relation et sauvegarder
-            currentUser.addConnection(friend);
-            userService.updateUser(currentUser);
+            userConnected.addConnection(friend);
+            userService.updateUser(userConnected);
 
             return "redirect:/transaction";
 
@@ -128,11 +123,46 @@ public class UserController {
 
         // Récupération de l'utilisateur connecté
         User currentUser = (User) userDetails;
-        Optional<User> userConnected = userService.getUserByEmail(currentUser.getEmail());
-        if (userConnected.isEmpty()) {
+        User userConnected = userService.getUserByEmail(currentUser.getEmail());
+        if (userConnected == null) {
             return "redirect:/login";
         }
-        model.addAttribute("user", userConnected.get());
+        model.addAttribute("profil", new Profil());
+        model.addAttribute("user", userConnected);
         return "user/profile";
+    }
+
+    // Affichage du formulaire d'édition
+    @GetMapping("/edit/{id}")
+    public String editUserForm(@PathVariable int id, Model model) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            return "redirect:/error";
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("profil", new Profil());
+        return "/user/edit";
+    }
+
+    // Traitement du formulaire de modification
+    @PostMapping("/edit/{id}")
+    public String updateUser(@PathVariable int id,
+                             @ModelAttribute("profil") @Valid Profil profil,
+                             BindingResult result, Model model) {
+        User user = userService.getUserById(id);
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            return "user/edit";
+        }else {
+            boolean resultUpdate = userService.updateUserProfil(id, profil);
+
+            if (!resultUpdate) {
+                model.addAttribute("user", user);
+                model.addAttribute("error", "Erreur lors de la modification." );
+                return "user/edit";
+            }
+        }
+
+        return "redirect:/user/profile";
     }
 }

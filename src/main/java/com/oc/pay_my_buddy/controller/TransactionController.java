@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -38,13 +36,15 @@ public class TransactionController {
     public String getAllTransactions(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Ajouter la liste des utilisateurs au modèle
         User currentUser = (User) userDetails;
-        Optional<User> userConnected = userService.getUserByEmail(currentUser.getEmail());
-        if (userConnected.isPresent()) {
-            currentUser = userConnected.get();
+        currentUser = this.userService.getUserByEmail(currentUser.getEmail());
+
+        if (currentUser == null) {
+            return "redirect:/login";
         }
+
         model.addAttribute("users", currentUser.getConnections());
         model.addAttribute("transaction", new Transaction());
-        model.addAttribute("transactions", transactionService.getAllTransactions());
+        model.addAttribute("transactions", transactionService.getTransactionsBySenderId(currentUser));
         return "/transaction/index";
     }
 
@@ -62,9 +62,9 @@ public class TransactionController {
 
         try {
             User currentUser = (User) userDetails;
-            Optional<User> userConnected = userService.getUserByEmail(currentUser.getEmail());
-            if (userConnected.isPresent()) {
-                currentUser = userConnected.get();
+            currentUser = this.userService.getUserByEmail(currentUser.getEmail());
+            if (currentUser == null) {
+                return "redirect:/login";
             }
 
             transaction.setSender(currentUser);

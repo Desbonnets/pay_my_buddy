@@ -1,6 +1,7 @@
 package com.oc.pay_my_buddy.service;
 
 import com.oc.pay_my_buddy.modele.Transaction;
+import com.oc.pay_my_buddy.modele.User;
 import com.oc.pay_my_buddy.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,9 @@ public class TransactionService {
 
     public Transaction createTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);
+    }
+
+    public List<Transaction> getTransactionsBySenderId(User user) {
+        return transactionRepository.findBySender(user);
     }
 }

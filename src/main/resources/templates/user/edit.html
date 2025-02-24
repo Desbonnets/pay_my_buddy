@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+  <title layout:title-pattern="Pay My Buddy - Modifier le profil">Modifier le profil</title>
+</head>
+  <body>
+    <main layout:fragment="content">
+      <form th:action="@{/user/edit/{id}(id=${user.id})}" th:object="${profil}" method="post">
+        <div class="user-info">
+          <!-- Username -->
+          <div class="row">
+            <label class="label" for="username">Username :</label>
+            <div>
+              <input type="text" id="username" name="username" placeholder="Username"
+                     th:field="*{username}" required/>
+              <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="row">
+            <label class="label" for="email">Mail :</label>
+            <div>
+              <input type="email" id="email" name="email" placeholder="Mail"
+                     th:field="*{email}" required/>
+              <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+          </div>
+
+          <!-- Mot de passe -->
+          <div class="row">
+            <label class="label" for="password">Mot de passe :</label>
+            <div>
+              <input type="password" id="password" name="password" placeholder="Nouveau mot de passe"
+                     th:field="*{password}" required/>
+              <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            </div>
+          </div>
+
+          <!-- Confirmation du mot de passe -->
+          <div class="row">
+            <label class="label" for="confirmPassword">Confirmer :</label>
+            <div>
+              <input type="password" id="confirmPassword" name="confirmPassword"
+                     placeholder="Confirmer le mot de passe" th:field="*{confirmPassword}" required/>
+              <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+            </div>
+          </div>
+        </div>
+        <div class="error" th:if="${error}" th:text="${error}"></div>
+        <!-- Bouton Modifier -->
+        <button class="btn btn-orange" type="submit">Modifier</button>
+      </form>
+    </main>
+  </body>
+</html>

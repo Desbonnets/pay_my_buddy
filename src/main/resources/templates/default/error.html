@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+    <head>
+        <title layout:title-pattern="Pay My Buddy - Modifier le profil">Modifier le profil</title>
+    </head>
+    <body>
+        <main layout:fragment="content">
+            <h1 th:text="${'Erreur ' + errorCode}"></h1>
+            <p th:text="${errorMessage}"></p>
+            <a href="/" class="btn">Retour à l'accueil</a>
+        </main>
+    </body>
+</html>
