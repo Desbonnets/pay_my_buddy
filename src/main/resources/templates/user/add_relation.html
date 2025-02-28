@@ -7,18 +7,19 @@
     </head>
     <body>
         <main layout:fragment="content">
-            <form th:action="@{/user/add_relation}" method="post" th:object="${relation}">
+            <form th:action="@{/user/add_relation}" method="post" th:object="${relation}" role="form">
                 <div class="flex-row flex-center">
                     <div class="mr-w1">
+                        <!-- Label associé au champ de saisie de l'email -->
                         <label for="email">Chercher une relation</label>
-                        <input type="text" id="email" name="email" placeholder="Saisir une adresse mail" th:field="*{email}" required/>
+                        <input type="text" id="email" name="email" placeholder="Saisir une adresse mail" th:field="*{email}" required aria-describedby="email-help"/>
                     </div>
-                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" aria-live="assertive"></div>
                     <button class="btn-fit btn-orange mt-w1" type="submit">Ajouter</button>
                 </div>
             </form>
 
-            <div th:if="${error}" style="color: red;">
+            <div th:if="${error}" style="color: red;" aria-live="assertive">
                 <p th:text="${error}"></p>
             </div>
         </main>

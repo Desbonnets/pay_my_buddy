@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="fr">
-<head>
-    <title layout:title-pattern="Pay My Buddy - $CONTENT_TITLE">Pay My Buddy</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
-</head>
-<body>
+    <head>
+        <title layout:title-pattern="Pay My Buddy - $CONTENT_TITLE">Pay My Buddy</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
+    </head>
+    <body>
 
-<!-- HEADER -->
-<header th:fragment="header">
-    <nav>
-        <ul>
-            <li class="left">Pay My Buddy</li>
-            <li><a href="/transaction" th:classappend="${currentPath == '/transaction'} ? 'active'">Transférer</a></li>
-            <li><a href="/user/profile" th:classappend="${currentPath == '/user/profile'} ? 'active'">Profil</a></li>
-            <li><a href="/user/add_relation" th:classappend="${currentPath == '/user/add_relation'} ? 'active'">Ajouter relation</a></li>
-            <li th:insert="~{security/logout :: logout}"></li>
-        </ul>
-    </nav>
-</header>
+        <!-- HEADER -->
+        <header th:fragment="header">
+            <nav role="navigation" aria-label="Menu principal">
+                <ul>
+                    <li class="left">Pay My Buddy</li>
+                    <li><a href="/transaction" th:classappend="${currentPath == '/transaction'} ? 'active'" aria-current="page">Transférer</a></li>
+                    <li><a href="/user/profile" th:classappend="${currentPath == '/user/profile'} ? 'active'" aria-current="page">Profil</a></li>
+                    <li><a href="/user/add_relation" th:classappend="${currentPath == '/user/add_relation'} ? 'active'" aria-current="page">Ajouter relation</a></li>
+                    <li th:insert="~{security/logout :: logout}" aria-label="Se déconnecter"></li>
+                </ul>
+            </nav>
+        </header>
 
-<!-- CONTENT -->
-<main layout:fragment="content">
+        <!-- CONTENT -->
+        <main layout:fragment="content">
 
-</main>
+        </main>
 
-<!-- FOOTER -->
-<footer th:fragment="footer">
-    <p>© 2025 Pay My Buddy</p>
-</footer>
+        <!-- FOOTER -->
+        <footer th:fragment="footer">
+            <p>© 2025 Pay My Buddy</p>
+        </footer>
 
-</body>
-<script layout:fragment="javascript"></script>
+    </body>
+    <script layout:fragment="javascript"></script>
 </html>

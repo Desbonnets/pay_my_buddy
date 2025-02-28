@@ -49,6 +49,13 @@ public class User implements UserDetails {
     // Constructeur par défaut
     public User() {}
 
+    // Constructeur avec paramètres pour initialiser un utilisateur
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     // Getters et setters
     public int getId() {
         return id;

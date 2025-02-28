@@ -2,10 +2,13 @@ package com.oc.pay_my_buddy.controller;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-public class DefaultController {
+@Controller
+public class CustomErrorController implements ErrorController {
 
     @GetMapping("/error")
     public String getError(HttpServletRequest request, Model model) {

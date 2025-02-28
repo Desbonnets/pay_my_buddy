@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
     <head>
         <title>Connexion</title>
         <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
@@ -12,16 +12,21 @@
             <div th:if="${param.logout}">
                 <p>Vous avez été déconnecté avec succès.</p>
             </div>
-            <form th:action="@{/login}" method="post">
-                <input type="text" id="username" name="username" placeholder="Email" required/>
-                <input type="password" id="password" name="password" placeholder="Mot de passe" required/>
+            <form th:action="@{/login}" method="post" role="form">
+                <!-- Label pour le champ Email -->
+                <label for="username">Email</label>
+                <input type="text" id="username" name="username" placeholder="Email" required aria-describedby="username-help"/>
+
+                <!-- Label pour le champ Mot de passe -->
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="Mot de passe" required aria-describedby="password-help"/>
 
                 <div class="flex-center">
                     <button class="btn btn-blue" type="submit">Connexion</button>
                 </div>
             </form>
 
-            <p th:if="${param.error}">Invalid username or password.</p>
+            <p th:if="${param.error}" aria-live="assertive" id="error-message">Nom d'utilisateur ou mot de passe invalide.</p>
         </div>
     </body>
 </html>
