@@ -74,7 +74,7 @@ public class UserController {
     public String addRelation(
             @Valid @ModelAttribute("relation") Relation relation,
             BindingResult bindingResult,
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User userDetails,
             Model model
     ) {
         if (bindingResult.hasErrors()) {
@@ -84,9 +84,9 @@ public class UserController {
         try {
 
             // Récupération de l'utilisateur connecté
-            User currentUser = (User) userDetails;
-            User userConnected = userService.getUserByEmail(currentUser.getEmail());
-            if (userConnected == null) {
+//            User currentUser = userDetails;
+//            User userConnected = userService.getUserByEmail(currentUser.getEmail());
+            if (userDetails == null) {
                 model.addAttribute("error", "Utilisateur connecté introuvable.");
                 return "user/add_relation";
             }
@@ -99,14 +99,14 @@ public class UserController {
             }
 
             // Vérifier si la relation existe déjà
-            if (userConnected.getConnections().contains(friend)) {
+            if (userDetails.getConnections().contains(friend)) {
                 model.addAttribute("error", "Cette relation existe déjà.");
                 return "user/add_relation";
             }
 
             // Ajouter la relation et sauvegarder
-            userConnected.addConnection(friend);
-            userService.updateUser(userConnected);
+            userDetails.addConnection(friend);
+            userService.updateUser(userDetails);
 
             return "redirect:/transaction";
 
@@ -119,16 +119,16 @@ public class UserController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('USER')")
-    public String showUserProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String showUserProfile(@AuthenticationPrincipal User userDetails, Model model) {
 
         // Récupération de l'utilisateur connecté
-        User currentUser = (User) userDetails;
-        User userConnected = userService.getUserByEmail(currentUser.getEmail());
-        if (userConnected == null) {
+//        User currentUser = userDetails;
+//        User userConnected = userService.getUserByEmail(currentUser.getEmail());
+        if (userDetails == null) {
             return "redirect:/login";
         }
         model.addAttribute("profil", new Profil());
-        model.addAttribute("user", userConnected);
+        model.addAttribute("user", userDetails);
         return "user/profile";
     }
 
