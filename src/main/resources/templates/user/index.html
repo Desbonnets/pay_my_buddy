@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
     <head>
         <title>Liste des utilisateurs</title>
     </head>
@@ -15,7 +15,6 @@
             </tr>
             </thead>
             <tbody>
-            <!-- Boucle Thymeleaf -->
             <tr th:each="user : ${users}">
                 <td th:text="${user.id}" role="cell"></td>
                 <td th:text="${user.username}" role="cell"></td>

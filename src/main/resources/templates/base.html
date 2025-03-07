@@ -11,13 +11,13 @@
 
         <!-- HEADER -->
         <header th:fragment="header">
-            <nav role="navigation" aria-label="Menu principal">
+            <nav aria-label="Menu principal">
                 <ul>
                     <li class="left">Pay My Buddy</li>
                     <li><a href="/transaction" th:classappend="${currentPath == '/transaction'} ? 'active'" aria-current="page">Transférer</a></li>
                     <li><a href="/user/profile" th:classappend="${currentPath == '/user/profile'} ? 'active'" aria-current="page">Profil</a></li>
                     <li><a href="/user/add_relation" th:classappend="${currentPath == '/user/add_relation'} ? 'active'" aria-current="page">Ajouter relation</a></li>
-                    <li th:insert="~{security/logout :: logout}" aria-label="Se déconnecter"></li>
+                    <li th:insert="~{security/logout :: logout}"></li>
                 </ul>
             </nav>
         </header>

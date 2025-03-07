@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{base}">
+      layout:decorate="~{base}" lang="fr">
     <head>
         <title layout:title-pattern="Pay My Buddy - Transfert">Transfert</title>
     </head>
@@ -9,21 +9,24 @@
         <main layout:fragment="content">
 
             <div>
-                <form th:action="@{/transaction}" method="post" th:object="${transaction}" role="form">
+                <form th:action="@{/transaction}" method="post" th:object="${transaction}">
                     <div class="flex-row">
                         <!-- Label pour le champ de sélection -->
                         <select id="receiver" name="receiver" th:field="*{receiver}" required aria-describedby="receiver-help">
                             <option value="">Sélectionner une relation</option>
                             <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.email}"></option>
                         </select>
+                        <span id="receiver-help" hidden="hidden">Sélectionner une relation</span>
                         <div th:if="${#fields.hasErrors('receiver')}" th:errors="*{receiver}" aria-live="assertive"></div>
 
                         <!-- Label pour le champ Description -->
                         <input type="text" id="description" name="description" placeholder="Description" th:field="*{description}" required aria-describedby="description-help"/>
+                        <span id="description-help" hidden="hidden">Renseignez une description</span>
                         <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" aria-live="assertive"></div>
 
                         <!-- Label pour le champ Montant -->
                         <input type="number" step="any" min="1" id="amount" th:step="0.01" name="amount" th:field="*{amount}" placeholder="0,00 €" required aria-describedby="amount-help"/>
+                        <span id="amount-help" hidden="hidden">Renseignez un montant</span>
                         <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" aria-live="assertive"></div>
 
                         <button class="btn-fit btn-blue" type="submit">Payer</button>

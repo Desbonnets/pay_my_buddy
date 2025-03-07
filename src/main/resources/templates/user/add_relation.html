@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{base}">
+      layout:decorate="~{base}" lang="fr">
     <head>
         <title layout:title-pattern="Pay My Buddy - Ajouter une relation">Ajouter une relation</title>
     </head>
     <body>
         <main layout:fragment="content">
-            <form th:action="@{/user/add_relation}" method="post" th:object="${relation}" role="form">
+            <form th:action="@{/user/add_relation}" method="post" th:object="${relation}">
                 <div class="flex-row flex-center">
                     <div class="mr-w1">
                         <!-- Label associé au champ de saisie de l'email -->
                         <label for="email">Chercher une relation</label>
                         <input type="text" id="email" name="email" placeholder="Saisir une adresse mail" th:field="*{email}" required aria-describedby="email-help"/>
+                        <span id="email-help" hidden="hidden">Renseignez un email</span>
                     </div>
                     <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" aria-live="assertive"></div>
                     <button class="btn-fit btn-orange mt-w1" type="submit">Ajouter</button>
