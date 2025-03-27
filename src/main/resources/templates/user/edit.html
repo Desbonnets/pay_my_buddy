@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}" lang="fr">
+  <head>
+    <title layout:title-pattern="Pay My Buddy - Modifier le profil">Modifier le profil</title>
+  </head>
+  <body>
+    <main layout:fragment="content">
+      <form th:action="@{/user/edit/{id}(id=${user.id})}" th:object="${profil}" method="post">
+        <div class="user-info">
+          <!-- Username -->
+          <div class="row">
+            <label class="label" for="username">Username :</label>
+            <div>
+              <input type="text" id="username" name="username" placeholder="Username"
+                     th:field="*{username}" required aria-describedby="username-info"/>
+              <span id="username-info" hidden="hidden">Renseignez votre nom d'utilisateur</span>
+              <div id="username-error" class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" aria-live="assertive"></div>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="row">
+            <label class="label" for="email">Mail :</label>
+            <div>
+              <input type="email" id="email" name="email" placeholder="Mail"
+                     th:field="*{email}" required aria-describedby="email-info"/>
+              <span id="email-info" hidden="hidden">Renseignez votre email</span>
+              <div id="email-error" class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" aria-live="assertive"></div>
+            </div>
+          </div>
+
+          <!-- Mot de passe -->
+          <div class="row">
+            <label class="label" for="password">Mot de passe :</label>
+            <div>
+              <input type="password" id="password" name="password" placeholder="Nouveau mot de passe"
+                     th:field="*{password}" required aria-describedby="password-info"/>
+              <span id="password-info" hidden="hidden">Renseignez votre nouveau mot de passe</span>
+              <div id="password-error" class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" aria-live="assertive"></div>
+            </div>
+          </div>
+
+          <!-- Confirmation du mot de passe -->
+          <div class="row">
+            <label class="label" for="confirmPassword">Confirmer :</label>
+            <div>
+              <input type="password" id="confirmPassword" name="confirmPassword"
+                     placeholder="Confirmer le mot de passe" th:field="*{confirmPassword}" required aria-describedby="confirmPassword-info"/>
+              <span id="confirmPassword-info" hidden="hidden">Confirmer le nouveau mot de passe</span>
+              <div id="confirmPassword-error" class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" aria-live="assertive"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Message d'erreur global -->
+        <div class="error" th:if="${error}" th:text="${error}" aria-live="assertive"></div>
+        <!-- Bouton Modifier -->
+        <button class="btn btn-orange" type="submit">Modifier</button>
+      </form>
+    </main>
+  </body>
+</html>

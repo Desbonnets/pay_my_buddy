@@ -1,30 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Liste des utilisateurs</title>
-</head>
-<body>
-<h1>Liste des utilisateurs</h1>
-<form action="/logout" method="get">
-    <button type="submit">Se déconnecter</button>
-</form>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nom d'utilisateur</th>
-        <th>Email</th>
-        <th>Mot de passe</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.username}"></td>
-        <td th:text="${user.email}"></td>
-        <td>.....</td>
-    </tr>
-    </tbody>
-</table>
-</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}" lang="fr">
+    <head>
+        <title layout:title-pattern="Pay My Buddy - Liste des utilisateurs">Liste des utilisateurs</title>
+    </head>
+    <body>
+        <main layout:fragment="content">
+            <div class="user-info">
+                <div class="row">
+                    <span class="label" id="username-label">Nom d'utilisateur :</span>
+                    <span class="value" role="definition" aria-labelledby="username-label" th:text="${user.username}"></span>
+                </div>
+                <div class="row">
+                    <span class="label" id="email-label">Mail :</span>
+                    <span class="value" role="definition" aria-labelledby="email-label" th:text="${user.email}"></span>
+                </div>
+                <div class="row">
+                    <span class="label" id="password-label">Mot de passe :</span>
+                    <span class="value" role="definition" aria-labelledby="password-label">Mot de passe masqué pour des raisons de sécurité</span>
+                </div>
+            </div>
+            <a class="btn btn-orange" th:href="@{/user/edit/{id}(id=${user.id})}" aria-label="Modifier le profil de ${user.username}">Modifier</a>
+        </main>
+    </body>
 </html>

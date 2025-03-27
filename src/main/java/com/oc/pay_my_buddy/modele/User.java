@@ -49,6 +49,13 @@ public class User implements UserDetails {
     // Constructeur par défaut
     public User() {}
 
+    // Constructeur avec paramètres pour initialiser un utilisateur
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     // Getters et setters
     public int getId() {
         return id;
@@ -111,8 +118,20 @@ public class User implements UserDetails {
         this.connections = connections;
     }
 
+    // Méthode pour ajouter une connexion réciproque avec vérification
     public void addConnection(User user) {
-        connections.add(user);
+        if (user != null && !this.connections.contains(user)) {
+            this.connections.add(user);
+            user.getConnections().add(this); // Ajouter l'utilisateur courant dans les connexions de l'autre utilisateur
+        }
+    }
+
+    // Méthode pour supprimer une connexion réciproque avec vérification
+    public void removeConnection(User user) {
+        if (user != null && this.connections.contains(user)) {
+            this.connections.remove(user);
+            user.getConnections().remove(this); // Retirer l'utilisateur courant des connexions de l'autre utilisateur
+        }
     }
 
     public List<Transaction> getTransactionsSent() {

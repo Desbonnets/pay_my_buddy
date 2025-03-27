@@ -5,6 +5,8 @@ import com.oc.pay_my_buddy.modele.User;
 import com.oc.pay_my_buddy.service.TransactionService;
 import com.oc.pay_my_buddy.service.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,14 +18,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/transaction")
 public class TransactionController {
 
     private TransactionService transactionService;
     private UserService userService;
+    private Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     public TransactionController(
             TransactionService transactionService,
@@ -35,16 +36,18 @@ public class TransactionController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('USER')")
-    public String getAllTransactions(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String getAllTransactions(Model model, @AuthenticationPrincipal User userDetails) {
         // Ajouter la liste des utilisateurs au modèle
-        User currentUser = (User) userDetails;
-        Optional<User> userConnected = userService.getUserByEmail(currentUser.getEmail());
-        if (userConnected.isPresent()) {
-            currentUser = userConnected.get();
+        User currentUser = userDetails;
+        currentUser = this.userService.getUserByEmail(currentUser.getEmail());
+
+        if (currentUser == null) {
+            return "redirect:/login";
         }
+
         model.addAttribute("users", currentUser.getConnections());
         model.addAttribute("transaction", new Transaction());
-        model.addAttribute("transactions", transactionService.getAllTransactions());
+        model.addAttribute("transactions", transactionService.getTransactionsBySenderId(currentUser));
         return "/transaction/index";
     }
 
@@ -53,27 +56,30 @@ public class TransactionController {
     public String newTransaction(
             @Valid @ModelAttribute("transaction") Transaction transaction,
             BindingResult bindingResult,
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User userDetails,
             Model model
     ) {
         if (bindingResult.hasErrors()) {
+            logger.info("test binding error");
             return "transaction/index";
         }
 
         try {
-            User currentUser = (User) userDetails;
-            Optional<User> userConnected = userService.getUserByEmail(currentUser.getEmail());
-            if (userConnected.isPresent()) {
-                currentUser = userConnected.get();
+//            User currentUser = userDetails;
+//            currentUser = this.userService.getUserByEmail(userDetails.getEmail());
+            if (userDetails == null) {
+                return "redirect:/login";
             }
 
-            transaction.setSender(currentUser);
+            transaction.setSender(userDetails);
             transactionService.createTransaction(transaction);
 
+            logger.info("transaction created");
             return "redirect:/transaction";
 
         } catch (Exception e) {
             model.addAttribute("error", "Erreur lors de la création du transfert.");
+            logger.info("test error: ", e);
             return "transaction/index";
         }
     }

@@ -1,29 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Inscription</title>
-</head>
-<body>
-<h1>Inscription</h1>
-    <form th:action="@{/user/new}" th:object="${user}" method="post">
-        <div>
-            <label for="username">nom d'utilisateur :</label>
-            <input type="text" id="username" name="username" th:field="*{username}" required/>
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div><br><br>
-        </div>
-        <div>
-            <label for="email">Email :</label>
-            <input type="text" id="email" name="email" th:field="*{email}" required/>
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div><br><br>
-        </div>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+    <head>
+        <title>Inscription</title>
+        <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
+    </head>
+    <body class="flex-center">
+        <div class="container">
+            <div class="mb-w2 mt-w1">
+                <label class="btn btn-orange">Pay My Buddy</label>
+            </div>
+            <form th:action="@{/user/new}" th:object="${user}" method="post">
+                <div>
+                    <label for="username">Nom d'utilisateur :</label>
+                    <input type="text" id="username" name="username" placeholder="Username" th:field="*{username}" required aria-describedby="username-info"/>
+                    <span id="username-info" hidden="hidden">Renseignez votre nom d'utilisateur</span>
+                    <div id="username-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error" aria-live="assertive"></div>
+                </div>
+                <div>
+                    <label for="email">Adresse email :</label>
+                    <input type="text" id="email" name="email" placeholder="Mail" th:field="*{email}" required aria-describedby="email-info"/>
+                    <span id="email-info" hidden="hidden">Renseignez votre e-mail</span>
+                    <div id="email-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error" aria-live="assertive"></div>
+                </div>
 
-        <div>
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" th:field="*{password}" required/>
-            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div><br><br>
-        </div>
+                <div>
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" placeholder="Mot de passe" th:field="*{password}" required aria-describedby="password-info"/>
+                    <span id="password-info" hidden="hidden">Renseignez votre mot de passe</span>
+                    <div id="password-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error" aria-live="assertive"></div>
+                </div>
 
-        <button type="submit">Inscription</button>
-    </form>
-</body>
+                <button class="btn btn-blue" type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </body>
 </html>

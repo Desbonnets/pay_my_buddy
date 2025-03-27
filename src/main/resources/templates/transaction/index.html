@@ -1,50 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Transfert</title>
-</head>
-<body>
-<div>
-    <form th:action="@{/transaction}" method="post" th:object="${transaction}">
-        <div>
-            <label for="receiver">Destinataire :</label>
-            <select id="receiver" name="receiver" th:field="*{receiver}" required>
-                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.email}"></option>
-            </select>
-            <div th:if="${#fields.hasErrors('receiver')}" th:errors="*{receiver}"></div><br><br>
-            <label for="description">Description :</label>
-            <input type="text" id="description" name="description" th:field="*{description}" required/>
-            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div><br><br>
-            <label for="amount">Montant :</label>
-            <input type="number" step="any" min="1" id="amount" name="amount" th:field="*{amount}" required/>
-            <span>€</span>
-            <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div><br><br>
-        </div>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}" lang="fr">
+    <head>
+        <title layout:title-pattern="Pay My Buddy - Transfert">Transfert</title>
+    </head>
+    <body>
+        <main layout:fragment="content">
 
-        <button type="submit">Ajouter</button>
-    </form>
+            <div>
+                <form th:action="@{/transaction}" method="post" th:object="${transaction}">
+                    <div class="flex-row">
+                        <!-- Label pour le champ de sélection -->
+                        <select id="receiver" name="receiver" th:field="*{receiver}" required aria-describedby="receiver-help">
+                            <option value="">Sélectionner une relation</option>
+                            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.email}"></option>
+                        </select>
+                        <span id="receiver-help" hidden="hidden">Sélectionner une relation</span>
+                        <div th:if="${#fields.hasErrors('receiver')}" th:errors="*{receiver}" aria-live="assertive"></div>
 
-    <div th:if="${error}" style="color: red;">
-        <p th:text="${error}"></p>
-    </div>
-</div>
-<h1>Mes Transactions</h1>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Relations</th>
-        <th>Description</th>
-        <th>Montant</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Boucle Thymeleaf -->
-    <tr th:each="transaction : ${transactions}">
-        <td th:text="${transaction.receiver.username}"></td>
-        <td th:text="${transaction.description}"></td>
-        <td th:text="${transaction.amount}"></td>
-    </tr>
-    </tbody>
-</table>
-</body>
+                        <!-- Label pour le champ Description -->
+                        <input type="text" id="description" name="description" placeholder="Description" th:field="*{description}" required aria-describedby="description-help"/>
+                        <span id="description-help" hidden="hidden">Renseignez une description</span>
+                        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" aria-live="assertive"></div>
+
+                        <!-- Label pour le champ Montant -->
+                        <input type="number" step="any" min="1" id="amount" th:step="0.01" name="amount" th:field="*{amount}" placeholder="0,00 €" required aria-describedby="amount-help"/>
+                        <span id="amount-help" hidden="hidden">Renseignez un montant</span>
+                        <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" aria-live="assertive"></div>
+
+                        <button class="btn-fit btn-blue" type="submit">Payer</button>
+                    </div>
+                </form>
+
+                <div th:if="${error}" style="color: red;" aria-live="assertive">
+                    <p th:text="${error}"></p>
+                </div>
+            </div>
+
+            <div class="table">
+                <table>
+                    <caption>Mes Transactions</caption>
+                    <thead>
+                    <tr>
+                        <th>Relations</th>
+                        <th>Description</th>
+                        <th>Montant</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Boucle Thymeleaf -->
+                    <tr th:each="transaction : ${transactions}">
+                        <td th:text="${transaction.receiver.username}"></td>
+                        <td th:text="${transaction.description}"></td>
+                        <td th:text="${transaction.amount+'€'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </body>
 </html>
