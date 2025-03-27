@@ -56,22 +56,22 @@ public class TransactionController {
     public String newTransaction(
             @Valid @ModelAttribute("transaction") Transaction transaction,
             BindingResult bindingResult,
-            @AuthenticationPrincipal User userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            logger.info("test binding error");
+            logger.info("test binding error: " + bindingResult);
             return "transaction/index";
         }
 
         try {
-//            User currentUser = userDetails;
-//            currentUser = this.userService.getUserByEmail(userDetails.getEmail());
-            if (userDetails == null) {
+
+            User currentUser = this.userService.getUserByEmail(userDetails.getUsername());
+            if (currentUser == null) {
                 return "redirect:/login";
             }
 
-            transaction.setSender(userDetails);
+            transaction.setSender(currentUser);
             transactionService.createTransaction(transaction);
 
             logger.info("transaction created");

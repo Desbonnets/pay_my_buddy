@@ -7,20 +7,26 @@ import com.oc.pay_my_buddy.service.CustomUserDetailService;
 import com.oc.pay_my_buddy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
@@ -31,7 +37,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @MockBean
-    private SecurityConfig securityConfig;
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserController userController;
@@ -43,17 +49,12 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userController = new UserController(userService, securityConfig);
+        userController = new UserController(userService, passwordEncoder);
         testUser = new User("TestUser", "test@example.com", "password123");
-//        userService.createUser(testUser);
-    }
 
-//    @Test
-//    void testLoadUserByUsername() {
-//        UserDetails userDetails = userDetailsService.loadUserByUsername("test@example.com");
-//        assertNotNull(userDetails);
-//        assertEquals("test@example.com", userDetails.getUsername());
-//    }
+        when(userService.getUserByEmail("test@example.com")).thenReturn(testUser);
+        when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword123");
+    }
 
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
@@ -99,7 +100,6 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
     void testAddRelation_ValidRelation_ShouldRedirect() throws Exception {
-        when(userService.getUserByEmail("test@example.com")).thenReturn(testUser);
         User friend = new User("FriendUser", "friend@example.com", "password123");
         when(userService.getUserByEmail("friend@example.com")).thenReturn(friend);
 
@@ -112,7 +112,7 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
-//    @WithMockUser(username = "test@example.com", roles = {"USER"})
+//    @WithUserDetails(value = "testUser", userDetailsServiceBeanName = "customUserDetailService")
     void testShowUserProfile_ShouldReturnProfilePage() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user/profile"))
@@ -137,17 +137,20 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
     void testUpdateUser_ValidProfil_ShouldRedirect() throws Exception {
-        Profil profil = new Profil();
-        profil.setEmail("profil@example.com");
-        profil.setPassword("password123");
-        profil.setUsername("profil@example.com");
-        profil.setConfirmPassword("password123");
+//        Profil profil = new Profil();
+//        profil.setUsername("UpdatedUser");
+//        profil.setEmail("updated@example.com");
+//        profil.setPassword("password123");
+//        profil.setConfirmPassword("password123");
 
-        when(userService.updateUserProfil(1, profil)).thenReturn(true);
+        when(userService.getUserById(1)).thenReturn(testUser);
+        when(userService.updateUserProfil(eq(1), any(Profil.class))).thenReturn(true);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/edit/1")
                         .param("username", "UpdatedUser")
                         .param("email", "updated@example.com")
+                        .param("password", "password123")
+                        .param("confirmPassword", "password123")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/profile"));

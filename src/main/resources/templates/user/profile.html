@@ -10,7 +10,7 @@
             <div class="user-info">
                 <div class="row">
                     <span class="label" id="username-label">Nom d'utilisateur :</span>
-                    <span class="value" role="definition" aria-labelledby="username-label" th:text="${user.username}"></span>
+                    <span class="value" role="definition" aria-labelledby="username-label" th:text="${user.username_User}"></span>
                 </div>
                 <div class="row">
                     <span class="label" id="email-label">Mail :</span>
@@ -21,7 +21,7 @@
                     <span class="value" role="definition" aria-labelledby="password-label">Mot de passe masqué pour des raisons de sécurité</span>
                 </div>
             </div>
-            <a class="btn btn-orange" th:href="@{/user/edit/{id}(id=${user.id})}" aria-label="Modifier le profil de ${user.username}">Modifier</a>
+            <a class="btn btn-orange" th:href="@{/user/edit/{id}(id=${user.id})}" aria-label="Modifier le profil">Modifier</a>
         </main>
     </body>
 </html>

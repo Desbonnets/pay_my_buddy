@@ -28,6 +28,10 @@
                 </div>
             </form>
 
+            <div class="flex-center mt-w1">
+                <a th:href="@{/user/new}" type="submit">Inscription</a>
+            </div>
+
             <p th:if="${param.error}" aria-live="assertive" id="error-message">Nom d'utilisateur ou mot de passe invalide.</p>
         </div>
     </body>

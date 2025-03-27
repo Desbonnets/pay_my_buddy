@@ -2,6 +2,8 @@ package com.oc.pay_my_buddy.modele;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -17,11 +19,13 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "receiver", nullable = false)
+    @NotNull(message = "L'expéditeur ne peut pas être null")
     private User receiver;
 
     @NotBlank(message = "La description est obligatoire")
     private String description;
 
+    @PositiveOrZero(message = "Le montant ne peut être négatif")
     private Double amount;
 
     // Constructeur par défaut

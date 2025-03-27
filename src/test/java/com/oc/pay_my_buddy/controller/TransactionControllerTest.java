@@ -56,7 +56,7 @@ public class TransactionControllerTest {
     @BeforeEach
     public void setup() {
         transactionController = new TransactionController(transactionService, userService);
-        mockUser = new User("testuser", "testuser@example.com", "password");
+        mockUser = new User("TestUser", "test@example.com", "password123");
     }
 
     @Test
@@ -123,27 +123,28 @@ public class TransactionControllerTest {
         assertEquals("transaction/index", viewName);
     }
 
-//    @Test
-//    @WithMockUser(username = "testuser@example.com", roles = {"USER"})
-//    public void testNewTransaction_Success() throws Exception {
-//
-//        User user2 = new User("testuser2", "testuser2@example.com", "password2");
-//        Transaction transaction = new Transaction();
-//        transaction.setReceiver(user2);
-//        transaction.setAmount(100.00);
-//        transaction.setDescription("description");
-//
-//        when(userService.getUserByEmail(mockUser.getEmail())).thenReturn(mockUser);
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//
-//        // Effectuer la requête MockMvc et vérifier le résultat
-//        mockMvc.perform(post("/transaction")
-//                        .with(SecurityMockMvcRequestPostProcessors.csrf())
-//                        .flashAttr("transaction", transaction))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl("/transaction"));
-//
-//        // Vérifier que la méthode du service a bien été appelée
-//        verify(transactionService, times(1)).createTransaction(transaction);
-//    }
+    @Test
+    @WithMockUser(username = "test@example.com", roles = {"USER"})
+    void testNewTransaction_Success() throws Exception {
+
+        User user2 = new User("testuser2", "testuser2@example.com", "password2");
+        Transaction transaction = new Transaction();
+        transaction.setSender(mockUser);
+        transaction.setReceiver(user2);
+        transaction.setAmount(100.00);
+        transaction.setDescription("description");
+
+        when(userService.getUserByEmail(mockUser.getEmail())).thenReturn(mockUser);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        // Effectuer la requête MockMvc et vérifier le résultat
+        mockMvc.perform(post("/transaction")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("transaction", transaction))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/transaction"));
+
+        // Vérifier que la méthode du service a bien été appelée
+        verify(transactionService, times(1)).createTransaction(transaction);
+    }
 }

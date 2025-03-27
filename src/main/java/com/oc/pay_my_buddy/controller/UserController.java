@@ -1,6 +1,5 @@
 package com.oc.pay_my_buddy.controller;
 
-import com.oc.pay_my_buddy.config.SecurityConfig;
 import com.oc.pay_my_buddy.dto.Profil;
 import com.oc.pay_my_buddy.dto.Relation;
 import com.oc.pay_my_buddy.modele.User;
@@ -10,7 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,13 +23,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final SecurityConfig securityConfig;
+    private final PasswordEncoder passwordEncoder;
     private final String pathNew = "user/new";
     private final Logger logger= LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserService userService, SecurityConfig securityConfig) {
+    public UserController(UserService userService, PasswordEncoder  passwordEncoder) {
         this.userService = userService;
-        this.securityConfig = securityConfig;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("")
@@ -51,7 +53,7 @@ public class UserController {
         }
 
         try {
-            user.setPassword(this.securityConfig.passwordEncoder().encode(user.getPassword()));
+            user.setPassword(this.passwordEncoder.encode(user.getPassword()));
             userService.createUser(user);
 
             return "redirect:/user";
@@ -74,7 +76,7 @@ public class UserController {
     public String addRelation(
             @Valid @ModelAttribute("relation") Relation relation,
             BindingResult bindingResult,
-            @AuthenticationPrincipal User userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             Model model
     ) {
         if (bindingResult.hasErrors()) {
@@ -82,11 +84,10 @@ public class UserController {
         }
 
         try {
-
             // Récupération de l'utilisateur connecté
-//            User currentUser = userDetails;
-//            User userConnected = userService.getUserByEmail(currentUser.getEmail());
-            if (userDetails == null) {
+            User userConnected = userService.getUserByEmail(userDetails.getUsername());
+            if (userConnected == null) {
+                logger.error(userDetails.getUsername());
                 model.addAttribute("error", "Utilisateur connecté introuvable.");
                 return "user/add_relation";
             }
@@ -99,14 +100,14 @@ public class UserController {
             }
 
             // Vérifier si la relation existe déjà
-            if (userDetails.getConnections().contains(friend)) {
+            if (userConnected.getConnections().contains(friend)) {
                 model.addAttribute("error", "Cette relation existe déjà.");
                 return "user/add_relation";
             }
 
             // Ajouter la relation et sauvegarder
-            userDetails.addConnection(friend);
-            userService.updateUser(userDetails);
+            userConnected.addConnection(friend);
+            userService.updateUser(userConnected);
 
             return "redirect:/transaction";
 
@@ -119,16 +120,17 @@ public class UserController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('USER')")
-    public String showUserProfile(@AuthenticationPrincipal User userDetails, Model model) {
+    public String showUserProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
         // Récupération de l'utilisateur connecté
-//        User currentUser = userDetails;
-//        User userConnected = userService.getUserByEmail(currentUser.getEmail());
-        if (userDetails == null) {
+        User userConnected = userService.getUserByEmail(userDetails.getUsername());
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.getAuthentication().getPrincipal();
+        if (userConnected == null) {
             return "redirect:/login";
         }
         model.addAttribute("profil", new Profil());
-        model.addAttribute("user", userDetails);
+        model.addAttribute("user", userConnected);
         return "user/profile";
     }
 
@@ -154,7 +156,7 @@ public class UserController {
             model.addAttribute("user", user);
             return "user/edit";
         }else {
-            boolean resultUpdate = userService.updateUserProfil(id, profil);
+            boolean resultUpdate = userService.updateUserProfil(1, profil);
 
             if (!resultUpdate) {
                 model.addAttribute("user", user);
