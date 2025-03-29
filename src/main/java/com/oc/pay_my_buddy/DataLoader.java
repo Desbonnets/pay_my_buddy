@@ -4,6 +4,9 @@ import com.oc.pay_my_buddy.modele.User;
 import com.oc.pay_my_buddy.modele.Transaction;
 import com.oc.pay_my_buddy.repository.UserRepository;
 import com.oc.pay_my_buddy.repository.TransactionRepository;
+import com.oc.pay_my_buddy.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,7 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Logger logger= LoggerFactory.getLogger(DataLoader.class);
 
     public DataLoader(
             UserRepository userRepository,
@@ -61,6 +65,6 @@ public class DataLoader implements CommandLineRunner {
         // Sauvegarder la transaction dans la base
         transactionRepository.save(transaction);
 
-        System.out.println("Données initiales insérées avec succès !");
+        logger.info("Données initiales insérées avec succès !");
     }
 }
