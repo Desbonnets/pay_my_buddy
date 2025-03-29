@@ -32,7 +32,6 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        this.logger.info("getUserByEmail: {}", email);
         return userRepository.findByEmail(email).orElse(null);
     }
 
@@ -52,7 +51,6 @@ public class UserService {
      */
     public boolean updateUserProfil(int id, Profil profil) {
         User user = this.getUserById(id);
-        logger.info("updateUserProfil: {}", profil.getEmail() + ", " + profil.getUsername() + ", " + profil.getPassword() + ", " + profil.getConfirmPassword());
 
         if (!(profil.getUsername().isEmpty() &&
                         profil.getPassword().isEmpty() &&
