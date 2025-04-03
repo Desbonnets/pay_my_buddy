@@ -1,6 +1,5 @@
 package com.oc.pay_my_buddy.controller;
 
-import com.oc.pay_my_buddy.config.SecurityConfig;
 import com.oc.pay_my_buddy.dto.Profil;
 import com.oc.pay_my_buddy.modele.User;
 import com.oc.pay_my_buddy.service.CustomUserDetailService;
@@ -14,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -112,7 +109,6 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
-//    @WithUserDetails(value = "testUser", userDetailsServiceBeanName = "customUserDetailService")
     void testShowUserProfile_ShouldReturnProfilePage() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user/profile"))
@@ -137,11 +133,6 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
     void testUpdateUser_ValidProfil_ShouldRedirect() throws Exception {
-//        Profil profil = new Profil();
-//        profil.setUsername("UpdatedUser");
-//        profil.setEmail("updated@example.com");
-//        profil.setPassword("password123");
-//        profil.setConfirmPassword("password123");
 
         when(userService.getUserById(1)).thenReturn(testUser);
         when(userService.updateUserProfil(eq(1), any(Profil.class))).thenReturn(true);
