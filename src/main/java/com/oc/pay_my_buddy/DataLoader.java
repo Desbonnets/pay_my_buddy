@@ -4,15 +4,11 @@ import com.oc.pay_my_buddy.modele.User;
 import com.oc.pay_my_buddy.modele.Transaction;
 import com.oc.pay_my_buddy.repository.UserRepository;
 import com.oc.pay_my_buddy.repository.TransactionRepository;
-import com.oc.pay_my_buddy.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Set;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -20,12 +16,13 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Logger logger= LoggerFactory.getLogger(DataLoader.class);
+    private final Logger logger = LoggerFactory.getLogger(DataLoader.class);
 
     public DataLoader(
             UserRepository userRepository,
             TransactionRepository transactionRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
         this.passwordEncoder = passwordEncoder;
@@ -33,37 +30,30 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Créer des utilisateurs
-        User alice = new User();
-        alice.setUsername("Alice");
-        alice.setEmail("alice@example.com");
-        alice.setPassword(passwordEncoder.encode("pass"));
+        // Insertion des utilisateurs avec requêtes SQL personnalisées
+        userRepository.insertUser("Alice", "alice@example.com", passwordEncoder.encode("pass"));
+        userRepository.insertUser("Bob", "bob@example.com", passwordEncoder.encode("pass"));
+        userRepository.insertUser("Charlie", "charlie@example.com", passwordEncoder.encode("pass"));
 
-        User bob = new User();
-        bob.setUsername("Bob");
-        bob.setEmail("bob@example.com");
-        bob.setPassword(passwordEncoder.encode("pass"));
+        // Récupération des utilisateurs pour créer les objets User
+        User alice = userRepository.findByEmail("alice@example.com").orElseThrow();
+        User bob = userRepository.findByEmail("bob@example.com").orElseThrow();
+        User charlie = userRepository.findByEmail("charlie@example.com").orElseThrow();
 
-        User charlie = new User();
-        charlie.setUsername("Charlie");
-        charlie.setEmail("charlie@example.com");
-        charlie.setPassword(passwordEncoder.encode("pass"));
+//        alice.addConnection(charlie);
+//        bob.addConnection(charlie);
 
-        // Ajouter des connexions (Many-to-Many)
-        alice.addConnection(charlie);
+        userRepository.updateUser(alice.getId(), alice.getUsername(), alice.getEmail(), alice.getPassword());
+        userRepository.updateUser(charlie.getId(), charlie.getUsername(), charlie.getEmail(), charlie.getPassword());
 
-        // Sauvegarder les utilisateurs dans la base
-        userRepository.saveAll(List.of(alice, bob, charlie));
-
-        // Créer une transaction entre Alice et Bob
+        // Créer une transaction entre Alice et Charlie
         Transaction transaction = new Transaction();
         transaction.setSender(alice);
         transaction.setReceiver(charlie);
         transaction.setDescription("Remboursement du déjeuner");
         transaction.setAmount(25.0);
 
-        // Sauvegarder la transaction dans la base
-        transactionRepository.save(transaction);
+        transactionRepository.insertTransaction(transaction.getSender().getId(), transaction.getReceiver().getId(), transaction.getDescription(), transaction.getAmount());
 
         logger.info("Données initiales insérées avec succès !");
     }

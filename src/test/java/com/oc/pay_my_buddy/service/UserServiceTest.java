@@ -80,22 +80,22 @@ class UserServiceTest {
 
     @Test
     void createUser_ShouldSaveAndReturnUser() {
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.ofNullable(user));
 
         User result = userService.createUser(user);
         assertNotNull(result);
         assertEquals(user, result);
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository, times(1)).insertUser(user.getUsername(), user.getEmail(), user.getPassword());
     }
 
     @Test
     void updateUser_ShouldSaveAndReturnUser() {
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
 
         User result = userService.updateUser(user);
         assertNotNull(result);
         assertEquals(user, result);
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository, times(1)).updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
     }
 
     @Test
@@ -107,11 +107,11 @@ class UserServiceTest {
         profil.setConfirmPassword("newPass");
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
+//        when(userRepository.save(any(User.class))).thenReturn(user);
 
         boolean result = userService.updateUserProfil(1, profil);
         assertTrue(result);
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository, times(1)).updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
     }
 
     @Test
