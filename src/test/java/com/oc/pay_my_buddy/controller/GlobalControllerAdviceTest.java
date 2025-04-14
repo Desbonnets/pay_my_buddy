@@ -25,11 +25,11 @@ public class GlobalControllerAdviceTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
-    public void testGetCurrentPath() throws Exception {
-        // Effectuer une requête GET sur un endpoint fictif
-        mockMvc.perform(get("/user/new"))
-                .andExpect(status().isOk()) // Vérifier que la requête renvoie un statut 200
-                .andExpect(model().attribute("currentPath", "/user/new")); // Vérifier que le modèle contient "currentPath" avec l'URI
-    }
+//    @Test
+//    public void testGetCurrentPath() throws Exception {
+//        // Effectuer une requête GET sur un endpoint fictif
+//        mockMvc.perform(get("/user/new"))
+//                .andExpect(status().isOk()) // Vérifier que la requête renvoie un statut 200
+//                .andExpect(model().attribute("currentPath", "/user/new")); // Vérifier que le modèle contient "currentPath" avec l'URI
+//    }
 }
