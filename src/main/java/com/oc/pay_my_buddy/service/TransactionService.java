@@ -17,18 +17,14 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAllTransactions();
+        return transactionRepository.findAll();
     }
 
-    public void createTransaction(Transaction transaction) {
-        transactionRepository.insertTransaction(
-                transaction.getSender().getId(),
-                transaction.getReceiver().getId(),
-                transaction.getDescription(),
-                transaction.getAmount());
+    public Transaction createTransaction(Transaction transaction) {
+        return transactionRepository.save(transaction);
     }
 
     public List<Transaction> getTransactionsBySenderId(User user) {
-        return transactionRepository.findBySenderId(user.getId());
+        return transactionRepository.findBySender(user);
     }
 }

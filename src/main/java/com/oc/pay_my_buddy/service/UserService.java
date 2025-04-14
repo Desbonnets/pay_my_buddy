@@ -36,13 +36,11 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        userRepository.insertUser(user.getUsername(), user.getEmail(), user.getPassword());
-        return getUserByEmail(user.getEmail());
+        return userRepository.save(user);
     }
 
     public User updateUser(User user) {
-        userRepository.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
-        return getUserById(user.getId());
+        return userRepository.save(user);
     }
 
     /**
@@ -70,7 +68,7 @@ public class UserService {
         }else {
             return false;
         }
-        updateUser(user);
+        userRepository.save(user);
         return true;
     }
 

@@ -38,36 +38,32 @@ class TransactionServiceTest {
     @Test
     void getAllTransactions_ShouldReturnTransactionList() {
         List<Transaction> transactions = Arrays.asList(transaction);
-        when(transactionRepository.findAllTransactions()).thenReturn(transactions);
+        when(transactionRepository.findAll()).thenReturn(transactions);
 
         List<Transaction> result = transactionService.getAllTransactions();
         assertEquals(1, result.size());
         assertEquals(transaction, result.get(0));
-        verify(transactionRepository, times(1)).findAllTransactions();
+        verify(transactionRepository, times(1)).findAll();
     }
 
     @Test
     void createTransaction_ShouldSaveAndReturnTransaction() {
-//        when(transactionRepository.save(transaction)).thenReturn(transaction);
-        User receiver = new User();
-        transaction.setReceiver(receiver);
-        transaction.setAmount(10.25);
-        transaction.setDescription("test");
+        when(transactionRepository.save(transaction)).thenReturn(transaction);
 
-        transactionService.createTransaction(transaction);
-//        assertNotNull(result);
-//        assertEquals(transaction, result);
-        verify(transactionRepository, times(1)).insertTransaction(transaction.getSender().getId(), transaction.getReceiver().getId(), transaction.getDescription(), transaction.getAmount());
+        Transaction result = transactionService.createTransaction(transaction);
+        assertNotNull(result);
+        assertEquals(transaction, result);
+        verify(transactionRepository, times(1)).save(transaction);
     }
 
     @Test
     void getTransactionsBySenderId_ShouldReturnTransactions() {
         List<Transaction> transactions = Arrays.asList(transaction);
-        when(transactionRepository.findBySenderId(sender.getId())).thenReturn(transactions);
+        when(transactionRepository.findBySender(sender)).thenReturn(transactions);
 
         List<Transaction> result = transactionService.getTransactionsBySenderId(sender);
         assertEquals(1, result.size());
         assertEquals(transaction, result.get(0));
-        verify(transactionRepository, times(1)).findBySenderId(sender.getId());
+        verify(transactionRepository, times(1)).findBySender(sender);
     }
 }
